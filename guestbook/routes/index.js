@@ -33,7 +33,7 @@ router.post('/adduser', function(req,res){
 	//set our collection
 	var collection = db.get('usercollection');
 
-	//submit to the database
+	//submit to the db
 	collection.insert({
 		"username" :userName,
 		"email": userEmail,
@@ -50,13 +50,40 @@ router.post('/adduser', function(req,res){
 		}
 	});
 });
+
 // Remove guest from guestbook
-router.get('/:id/delete/', function (req, res) {
-  var id = req.params.id;
-  var objectId = new ObjectID(id);
-  var db = req.db;
-  var collection = db.get('guests');
-  collection.remove({"_id": objectId});
-  res.redirect('/');
+router.get('/:id', function(req,res){
+    var id = req.params.id;
+	  var objectId = require('mongodb').ObjectID(id);
+
+	  var db = req.db;
+	  var collection = db.get('usercollection');
+	  console.log(collection);
+	  collection.remove({_id: objectId});
+	  res.redirect('/');
+
 });
+
+
+// route to message page
+router.get('/:id/usermessage', function(req,res){
+    var id = req.params.id;
+	  var objectId = new ObjectID(id);
+
+	  var db = req.db;
+	  var collection = db.get('usercollection');
+	  console.log(collection);
+	  collection.find({_id: objectId}, function(err, result){
+        if(err){
+			      res.send("An error has occured.");
+		    }
+		    else{
+		        res.render('message', {
+				                    "usermessage" : result
+			               });
+		        //res.json(result);
+		        }
+	   });
+});
+
 module.exports = router;
