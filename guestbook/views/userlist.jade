@@ -1,27 +1,9 @@
-
 extends layout
 
 block content
     h1.
-        Guestbook
-
-    p
-      form#formAddUser(name="adduser", method="post", action="/")
-          input#inputUserName(type="text", placeholder="Username", name="username")
-          input#inputUserEmail(type="text", placeholder="Email", name="useremail")
-          input#inputUserMessage(type="text", placeholder="Message", name="usermessage")
-          button#btnSubmit(type="submit") Add Guest
-
-    table.table
-      thead
-        td Name:
-        td Email:
-        td Message:
-        td
-      tbody
+        User List
+    ul
         each user, i in userlist
-          tr
-            td= user.username
-            td= user.email
-            td= user.message
-            td
+            li
+                a(href="mailto:#{user.email}")= user.username
